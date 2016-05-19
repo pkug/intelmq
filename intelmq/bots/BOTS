@@ -814,6 +814,18 @@
                 "port": "<port>"
             }
         },
+        "Rtir": {
+            "description": "Rtir bot responsible for automating RTIR incident response workflow",
+            "module": "intelmq.bots.outputs.rtirbot.output",
+            "parameters": {
+		"rt_url": "https://<rtir>/REST/1.0/",
+		"rt_user": "abusehelper",
+		"rt_password": "",
+		"rt_template_dir": "/opt/intelmq/templates",
+		"rt_use_templates": true,
+		"rt_inv_frequency": "1.7"
+            }
+        },
         "MongoDB": {
             "description": "MongoDB is the bot responsible to send events to a MongoDB database.",
             "module": "intelmq.bots.outputs.mongodb.output",
