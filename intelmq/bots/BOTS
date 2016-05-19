@@ -1187,6 +1187,11 @@
             "description": "VXVault Parser is the bot responsible to parse the report and sanitize the information.",
             "module": "intelmq.bots.parsers.vxvault.parser",
             "parameters": {}
+        },
+        "Copyright Mail": {
+            "description": "Copyright Mail Parser bot reponsible for parsing mail reports about copyright infringements using standard infringement schema.",
+            "module": "intelmq.bots.parsers.copyright.parser",
+            "parameters": {}
         }
     }
 }
