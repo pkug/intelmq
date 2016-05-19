@@ -13,6 +13,11 @@ from urllib.parse import urlencode, quote
 
 from dateutil.parser import parse as date_parse
 
+import ssl
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+
 # XXX: keeping this global for now :(
 logger = None
 
@@ -32,7 +37,7 @@ class RtClient:
                          "Accept": "text/plain"}
 
         cookie = LWPCookieJar()
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie))
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie), urllib2.HTTPSHandler(context=ctx))
         urllib2.install_opener(opener)
         login = urllib2.Request(url, urlencode({'user': user,
                                                 'pass': password}).encode())
@@ -163,7 +168,7 @@ class RtClient:
         attachment_ids = []
         content = ""
 
-        logger.debug("Getting attachments (#%d)", ticket_id)
+        logger.debug("Getting attachments (#%s)", ticket_id)
 
         url = self.url + 'ticket/' + str(ticket_id) + '/attachments'
         response_ok, response_value = self._rt_request(url)
@@ -183,7 +188,7 @@ class RtClient:
 
     def _get_attachment_contents(self, ticket_id, attachment_id):
 
-        logger.debug("Getting attachment contents (#%d)", ticket_id)
+        logger.debug("Getting attachment contents (#%s)", ticket_id)
 
         content = ""
         url = self.url + 'ticket/' + str(ticket_id) + '/attachments/' + \
@@ -319,6 +324,8 @@ class RtIncident(RtTicket):
 
     cf_classification = ""
     cf_inctype = ""
+    cf_severity = ""
+    cf_importance = ""
     description = ""
 
     def _generate_extra_parameters(self):
@@ -335,6 +342,10 @@ class RtIncident(RtTicket):
             self.cf_classification + "\n"
         self.custom_fields += "CF.{Incident Type}: " + \
             self.cf_inctype + "\n"
+        self.custom_fields += "CF.{Incident Severity}: " + \
+            self.cf_severity + "\n"
+        self.custom_fields += "CF.{Importance}: " + \
+            self.cf_importance + "\n"
         self.custom_fields += "CF.{Description}: " + \
             self.description + "\n"
 
@@ -354,6 +365,8 @@ class RtIncidentReport(RtTicket):
     # IRs don't use cf_classification and description. Used to fwd info to parent.
     cf_classification = ""
     cf_inctype = ""
+    cf_severity = ""
+    cf_importance = ""
     description = ""
     # Leave empty, unless you want to send mail for created IRs
     requestor = ""
@@ -518,6 +531,8 @@ class RtirWorkflow(object):
             parent_ticket.subject = ticket.subject
             parent_ticket.cf_classification = ticket.cf_classification
             parent_ticket.cf_inctype = ticket.cf_inctype
+            parent_ticket.cf_importance = ticket.cf_importance
+            parent_ticket.cf_severity = ticket.cf_severity
             parent_ticket.description = ticket.description
             parent_ticket.cf_ah = "Yes"
             parent_ticket.custom_fields = ""
@@ -621,14 +636,14 @@ class RtirWorkflow(object):
                         open_investigation_ids[0],
                         contents,
                         'correspond')
-                    logger.info("Investigation %r updated (#%d)",
+                    logger.info("Investigation %r updated (#%s)",
                                 open_investigation_ids[0], incident_id)
 
                 else:
 
                     # Resolve IR
                     logger.info("Investigation modified %r ago, only linking "
-                                "and resolving IR (#%d)", timeago, incident_id)
+                                "and resolving IR (#%s)", timeago, incident_id)
                     link_successful = True
             else:
                 # This should not happen unless someone has manually
@@ -637,7 +652,7 @@ class RtirWorkflow(object):
                 link_successful = False
                 logger.info("Auto update of investigation is not "
                             "possible. Manually updated or perhaps other IRs "
-                            "being open? (#%d)", incident_id)
+                            "being open? (#%s)", incident_id)
         else:
             rt_investigation = RtInvestigation()
             contents = self._create_investigation_contents(
@@ -670,14 +685,14 @@ class RtirWorkflow(object):
 
             if link_successful:
                 logger.info("Investigation %r with requestor '%r' created and "
-                            "linked (#%d)",
+                            "linked (#%s)",
                              rt_investigation.id,
                              rt_requestor,
                              incident_id)
 
         # Close IRs that were successfully processed
         if link_successful:
-            logger.info("Resolving IRs: %r (#%d)", ir_ids, incident_id)
+            logger.info("Resolving IRs: %r (#%s)", ir_ids, incident_id)
             for ir_id in ir_ids:
                 self.rt_client.close_ticket(ir_id)
 
@@ -710,12 +725,12 @@ class RtTicketTemplate(object):
         name += '_' + templatefn.lower()
 
         try:
-            logger.info("Opening templates from %s (#%d)",
+            logger.info("Opening templates from %s (#%s)",
                         osp.abspath(directory), inc_id)
             template_file = codecs.open(osp.join(osp.abspath(directory), name),
                                         "r", "utf-8", "ignore")
         except IOError:
-            logger.error("Failed opening template '%s' (#%d)", name,
+            logger.error("Failed opening template '%s' (#%s)", name,
                          inc_id)
             return
 
