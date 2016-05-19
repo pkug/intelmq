@@ -59,7 +59,10 @@ class ModifyExpertBot(Bot):
                 continue
 
             applied = False
-            for rule_id, (rule_cond, rule_action) in section.items():
+
+            # XXX: Sort by rule_id
+            for rule_id, (rule_cond, rule_action) in sorted(section.items(),
+                                                            key=lambda x: x[0]):
                 if rule_id == '__default':
                     continue
                 if self.matches((section_id, rule_id),
@@ -68,6 +71,11 @@ class ModifyExpertBot(Bot):
                                                                  rule_id))
                     self.apply_action(event, rule_action)
                     applied = True
+
+                    if rule_id.endswith("-FINAL"):
+                        self.logger.debug('Final rule, skipping others.')
+                        break
+
                     continue
 
             if not applied and default_action != {}:
