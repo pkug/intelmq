@@ -1151,6 +1151,11 @@
                 "override": true
             }
 	},
+        "TC Console": {
+            "description": "TC Console Parser is the bot responsible to parse the report and sanitize the information.",
+            "module": "intelmq.bots.parsers.tcconsole.parser",
+            "parameters": {}
+        },
         "CYMRU CERT": {
             "description": "CYMRU CERT Parser is the bot responsible to parse the report and sanitize the information.",
             "module": "intelmq.bots.parsers.tccert.parser",
