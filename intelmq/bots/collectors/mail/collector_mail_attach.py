@@ -57,6 +57,7 @@ class MailAttachCollectorBot(Bot):
                         report.add("raw", raw_report)
                         report.add("feed.name", self.parameters.feed)
                         report.add("feed.accuracy", self.parameters.accuracy)
+                        report.add("attachment", attach_name)
 
                         self.send_message(report)
 
