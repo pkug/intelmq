@@ -13,6 +13,7 @@ parse_logline
 """
 import base64
 import json
+import codecs
 import logging
 import logging.handlers
 import os
@@ -168,15 +169,19 @@ def load_configuration(configuration_filepath):
         Parsed configuration
     """
     if os.path.exists(configuration_filepath):
-        with open(configuration_filepath, 'r') as fpconfig:
-            config = json.loads(fpconfig.read())
+        filepath = configuration_filepath
     elif configuration_filepath.find(intelmq.CONFIG_DIR) == 0:  # at beginning
         newpath = pkg_resources.resource_filename('intelmq', 'etc/')
         filepath = configuration_filepath.replace(intelmq.CONFIG_DIR,
                                                   newpath)
-        if os.path.exists(filepath):
-            with open(filepath, 'r') as fpconfig:
-                config = json.loads(fpconfig.read())
+
+    with codecs.open(configuration_filepath, 'r', 'utf-8') as fpconfig:
+        contents = ""
+        # ignore comments
+        for line in fpconfig.read().splitlines():
+            if not line.strip().startswith("#"):
+                contents += line.rstrip()
+        config = json.loads(contents)
     return config
 
 
@@ -264,33 +269,9 @@ def log(name, log_path=intelmq.DEFAULT_LOGGING_PATH, log_level="DEBUG",
     return logger
 
 
-def reverse_readline(filename, buf_size=100000):
-    """
-    https://github.com/certtools/intelmq/issues/393#issuecomment-154041996
-
-    """
-    with open(filename) as qfile:
-        qfile.seek(0, os.SEEK_END)
-        position = totalsize = qfile.tell()
-        line = ''
-        number = 0
-        if buf_size < position:
-            qfile.seek(totalsize - buf_size - 1)
-            char = qfile.read(1)
-            while char != '\n':
-                char = qfile.read(1)
-            number = totalsize - buf_size
-        while position >= number:
-            qfile.seek(position)
-            next_char = qfile.read(1)
-            if next_char == "\n":
-                yield line[::-1]
-                line = ''
-            else:
-                line += next_char
-            position -= 1
-        yield line[::-1]
-
+def reverse_readline(filename):
+    for line in reversed(list(codecs.open(filename, 'r', 'utf-8'))):
+        yield line.rstrip()
 
 def parse_logline(logline):
     """
