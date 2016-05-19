@@ -143,6 +143,7 @@ class ClassificationType(GenericType):
                       'malware configuration',
                       'c&c',
                       'scanner',
+                      'piracy',
                       'exploit',
                       'brute-force',
                       'ids alert',
