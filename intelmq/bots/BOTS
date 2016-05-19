@@ -709,6 +709,14 @@
                 "asns": "2468,2555"
             }
         },
+        "Domain Match": {
+            "description": "Filters out events by matching domains (FQDNs and URLs) from file",
+            "module": "intelmq.bots.experts.domainmatch.expert",
+            "parameters": {
+                "srcdest": "<source/destination/both>",
+                "configfile": "/opt/intelmq/var/lib/bots/domainmatch/domains.txt"
+            }
+        },
         "MaxMind GeoIP": {
             "description": "MaxMind GeoIP is the bot responsible for adding geolocation information to events (Country, City, Longitude, Latitude, etc..)",
             "module": "intelmq.bots.experts.maxmind_geoip.expert",
