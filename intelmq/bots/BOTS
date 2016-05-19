@@ -717,6 +717,13 @@
                 "configfile": "/opt/intelmq/var/lib/bots/domainmatch/domains.txt"
             }
         },
+        "Required Fields": {
+            "description": "Discards events without following required fields",
+            "module": "intelmq.bots.experts.reqfields.expert",
+            "parameters": {
+                "reqfields": "source.ip, classification.type, classification.identifier, feed.name"
+            }
+        },
         "MaxMind GeoIP": {
             "description": "MaxMind GeoIP is the bot responsible for adding geolocation information to events (Country, City, Longitude, Latitude, etc..)",
             "module": "intelmq.bots.experts.maxmind_geoip.expert",
