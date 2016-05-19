@@ -9,6 +9,32 @@
                 "rate_limit": 129600
             }
         },
+        "TC Console": {
+            "description": "Team CYMRU Console malicious activity feed collector bot.",
+            "module": "intelmq.bots.collectors.http.collector_http",
+            "parameters": {
+		"feed": "TC Console",
+		"rate_limit": 129600,
+		"http_url": "https://www.tcconsole.com/export/{date}/malevolence.txt",
+		"datefmt": "%Y%m%d",
+		"http_username": "user",
+		"http_password": "pass",
+		"ignorecodes": "404"
+            }
+        },
+        "CYMRU CERT": {
+            "description": "Team CYMRU CERT malicious activity feed collector bot.",
+            "module": "intelmq.bots.collectors.http.collector_http",
+            "parameters": {
+		"feed": "CYMRU",
+		"rate_limit": 129600,
+		"http_url": "http://www.cymru.com/<CERT>/infected_{date}.txt",
+		"datefmt": "%Y%m%d",
+		"http_username": "user",
+		"http_password": "pass",
+		"ignorecodes": "404"
+            }
+        },
         "Abuse.ch Feodo Tracker IPs": {
             "description": "The Feodo Tracker Feodo IP Blocklist contains IP addresses (IPv4) used as C&C communication channel by the Feodo Trojan. This lists contains two types of IP address: Feodo C&C servers used by version A, version C and version D of the Feodo Trojan (these IP addresses are usually compromised servers running an nginx daemon on port 8080 TCP or 7779 TCP that is acting as proxy, forwarding all traffic to a tier 2 proxy node) and Feodo C&C servers used by version B which are usually used for the exclusive purpose of hosting a Feodo C&C server. Attention: Since Feodo C&C servers associated with version A, version C and version D are usually hosted on compromised servers, its likely that you also block/drop legit traffic e.g. towards websites hosted on a certain IP address acting as Feodo C&C for version A, version C and version D. If you only want to block/drop traffic to Feodo C&C servers hosted on bad IPs (version B), please use the blocklist BadIPs documented below.",
             "module": "intelmq.bots.collectors.http.collector_http",
