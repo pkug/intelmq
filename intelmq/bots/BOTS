@@ -1150,6 +1150,11 @@
                 "feedname": "",
                 "override": true
             }
+	},
+        "CYMRU CERT": {
+            "description": "CYMRU CERT Parser is the bot responsible to parse the report and sanitize the information.",
+            "module": "intelmq.bots.parsers.tccert.parser",
+            "parameters": {}
         },
         "Spamhaus CERT": {
             "description": "Spamhaus CERT Parser is the bot responsible to parse the report and sanitize the information.",
