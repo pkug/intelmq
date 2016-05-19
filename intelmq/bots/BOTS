@@ -331,6 +331,20 @@
                 "url_regex": "http://"
             }
         },
+        "Generic Mail body collector": {
+            "description": "Mail body collector bot",
+            "module": "intelmq.bots.collectors.mail.collector_mail_body",
+            "parameters": {
+		"mail_host": "",
+		"mail_user": "",
+		"mail_password": "",
+		"mail_folder": "Inbox",
+		"mail_ssl": true,
+		"mail_subject_regex": "",
+		"mail_subject_ignorecase": true,
+		"feed": ""
+	    }
+        },
         "HpHosts": {
             "description": "HPHost Collector is the bot responsible to get the report from source of information.",
             "module": "intelmq.bots.collectors.http.collector_http",
