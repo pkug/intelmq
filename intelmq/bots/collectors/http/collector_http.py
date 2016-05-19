@@ -17,6 +17,7 @@ import sys
 import zipfile
 
 import requests
+from time import strftime
 
 from intelmq.lib.bot import Bot
 from intelmq.lib.message import Report
@@ -28,6 +29,10 @@ class HTTPCollectorBot(Bot):
         self.http_header = getattr(self.parameters, 'http_header', {})
         self.http_verify_cert = getattr(self.parameters, 'http_verify_cert',
                                         True)
+
+        self.ignorecodes = [int(x.strip()) for x in \
+                            str(getattr(self.parameters, 'ignorecodes', ''))\
+                            .split(",") if x]
 
         if hasattr(self.parameters, 'http_username') and hasattr(
                 self.parameters, 'http_password'):
@@ -49,13 +54,21 @@ class HTTPCollectorBot(Bot):
         self.logger.info("Downloading report from %s" %
                          self.parameters.http_url)
 
+        if hasattr(self.parameters, 'datefmt'):
+            self.parameters.http_url = self.parameters.http_url\
+                .format(date=strftime(self.parameters.datefmt))
+
         resp = requests.get(url=self.parameters.http_url, auth=self.auth,
                             proxies=self.proxy, headers=self.http_header,
                             verify=self.http_verify_cert)
 
         if resp.status_code // 100 != 2:
-            raise ValueError('HTTP response status code was {}.'
-                             ''.format(resp.status_code))
+            if any(resp.status_code == code for code in self.ignorecodes):
+                self.logger.info("Ignoring status code %r", resp.status_code)
+                return
+            else:
+                raise ValueError('HTTP response status code was {}.'
+                                 ''.format(resp.status_code))
 
         self.logger.info("Report downloaded.")
 
