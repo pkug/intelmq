@@ -740,6 +740,14 @@
                 "timezone": "EET"
             }
         },
+        "CertBTContact": {
+            "description": "Finds contact in .CSV or WHOIS server.",
+            "module": "intelmq.bots.experts.certbt_contact.expert",
+            "parameters": {
+                "whois_server": "whois.apnic.net",
+                "contacts_file": "/opt/intelmq/contacts.csv"
+            }
+        },
         "Modify": {
             "description": "Modify bot can make nearly arbitrary changes to event's fields based on regex-rules on different values. See docs/Bots.md for some examples.",
             "module": "intelmq.bots.experts.modify.expert",
