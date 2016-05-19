@@ -698,6 +698,16 @@
             "description": "fqdn2ip is the bot responsible to parsing the ip from the fqdn.",
             "module": "intelmq.bots.experts.gethostbyname.expert",
             "parameters": {}
+	},
+        "Constituency": {
+            "description": "Filters out events according to constituency, either by matching ASNs, IP ranges or both",
+            "module": "intelmq.bots.experts.constituency.expert",
+            "parameters": {
+                "srcdest": "<source/destination/both>",
+                "ipranges": "193.168.10.0/24,192.168.0.0/24",
+		"ipexcept": "127.0.0.1",
+                "asns": "2468,2555"
+            }
         },
         "MaxMind GeoIP": {
             "description": "MaxMind GeoIP is the bot responsible for adding geolocation information to events (Country, City, Longitude, Latitude, etc..)",
