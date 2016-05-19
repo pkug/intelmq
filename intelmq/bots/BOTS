@@ -724,6 +724,15 @@
                 "database": "/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb"
             }
         },
+        "LogCollector": {
+            "description": "Finds abuse contact and collects networl logs (Flow, NAT, etc)",
+            "module": "intelmq.bots.experts.logcollector.expert",
+            "parameters": {
+                "whois_server": "adresai.litnet.lt",
+                "log_collect_cmd": "ssh log@logserver.litnet.lt logs/natlogs_noflows.sh",
+                "timezone": "EET"
+            }
+        },
         "Modify": {
             "description": "Modify bot can make nearly arbitrary changes to event's fields based on regex-rules on different values. See docs/Bots.md for some examples.",
             "module": "intelmq.bots.experts.modify.expert",
