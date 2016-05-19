@@ -202,6 +202,9 @@ class Message(dict):
         class_name = self.harmonization_config[key]
         return class_name
 
+    def value(self, key):  # XXX: Keeping only for the legacy bots
+        return self.__getitem__(key)
+
     def __hash__(self):
         event_hash = hashlib.sha256()
 
