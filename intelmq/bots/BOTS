@@ -1188,6 +1188,11 @@
             "module": "intelmq.bots.parsers.vxvault.parser",
             "parameters": {}
         },
+        "ShadowServer Mail": {
+            "description": "ShadowServer Mail Parser bot reponsible for parsing mail reports from ShadowServer.",
+            "module": "intelmq.bots.parsers.shadowservermail.parser",
+            "parameters": {}
+        },
         "Copyright Mail": {
             "description": "Copyright Mail Parser bot reponsible for parsing mail reports about copyright infringements using standard infringement schema.",
             "module": "intelmq.bots.parsers.copyright.parser",
