@@ -240,8 +240,9 @@ class ShadowServerParserBot(Bot):
             if handler:
                 (mapping, keys, vals, fn) = handler
                 map_event(self.logger, event, row, mapping)
-                event.add('extra', json.dumps({ k: row[k] for k in keys \
-                                               if k in row }))
+                extra = { k: row[k] for k in keys if k in row }
+                if extra:
+                    event.add('extra', extra)
                 for k, v in vals.items():
                     event.add(k, v)
 

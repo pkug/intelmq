@@ -63,7 +63,7 @@ class CopyrightParserBot(Bot):
         for item in content:
             items.append({ e.tag: e.text for e in item })
 
-        event.add('extra', json.dumps(items))
+        event.add('extra', items)
 
         self.send_message(event)
         self.acknowledge_message()
