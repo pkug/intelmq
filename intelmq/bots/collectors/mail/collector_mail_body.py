@@ -51,9 +51,6 @@ class MailBodyCollectorBot(Bot):
                 report.add("raw", message.body['plain'][0], sanitize=True)
                 report.add("feed.name", self.parameters.feed,
                            sanitize=True)
-                time_observation = DateTime().generate_datetime_now()
-                report.add('time.observation', time_observation,
-                           sanitize=True)
 
                 self.send_message(report)
 
