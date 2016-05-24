@@ -731,7 +731,9 @@
             "parameters": {
                 "filter_action": "<keep/drop>",
                 "filter_key": "<source.geolocation.cc>",
-                "filter_value": "<PT>"
+                "filter_value": "<PT>",
+                "not_before": "",
+                "not_after": ""
             }
         },
         "Gethostbyname": {
