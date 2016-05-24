@@ -13,7 +13,7 @@ from intelmq.lib.message import Event
 
 class TCConsoleParserBot(Bot):
 
-    def bots(self, event, comments):
+    def parse_comments(self, event, comments):
         mapping = {
                 'srcport': 'source.port',
                 'mwtype': 'classification.identifier',
@@ -24,10 +24,37 @@ class TCConsoleParserBot(Bot):
         for k, v in mapping.items():
             if k in d:
                 event.add(v, d[k], sanitize=True)
-        return True
 
     def process(self):
         report = self.receive_message()
+
+        self.categories = {
+            "beagle": "malware",
+            "blaster": "malware",
+            "bots": "botnet drone",
+            "bruteforce": "brute-force",
+            "dameware": "malware",
+            "ddosreport": "ddos",
+            "defacement": "defacement",
+            "dipnet": "malware",
+            "fastflux": "malware configuration",
+            "malwareurl": "malware configuration",
+            "mydoom": "malware",
+            "nachi": "malware",
+            "openresolvers": "vulnerable service",
+            "phatbot": "botnet drone",
+            "phishing": "phishing",
+            "proxy": "vulnerable service",
+            "routers": "compromised",
+            "scanners": "scanner",
+            "sinit": "malware",
+            "slammer": "malware",
+            "spam": "spam",
+            "spreaders": "dropzone",
+            "stormworm": "malware",
+            "toxbot": "botnet drone",
+        }
+
 
         self.columns = OrderedDict()
         self.columns['report'] = None
@@ -36,10 +63,6 @@ class TCConsoleParserBot(Bot):
         self.columns['timestamp'] = None
         self.columns['comments'] = None
         self.columns['asn_name'] = None
-
-        self.categories = {
-            "bots": ("botnet drone", self.bots),
-        }
 
         raw_report = utils.base64_decode(report.value("raw"))
 
@@ -58,12 +81,13 @@ class TCConsoleParserBot(Bot):
 
                 event.add(field, row[key], sanitize=True)
 
-            if row['report'] not in self.categories and not \
-                    self.categories[row['report']][1](event, row['comments']):
-                continue
 
-            event.add('classification.type',
-                      self.categories[row['report']][0])
+            self.parse_comments(event,row['comments'])
+            ctype = self.categories[row['report']] if row['report'] in self.categories \
+            else 'report'
+
+            event.add('classification.type', ctype)
+            event.add('extra', { 'extra': row['comments']}, sanitize=True)
             event.add('time.source', row['timestamp'] + ' UTC', sanitize=True)
             event.add("raw", ",".join(row), sanitize=True)
 
