@@ -35,7 +35,7 @@ class TCPBot(Bot):
         while True:
             try:
                 self.con.send(utils.encode(data))
-                self.con.sendall(b"")
+                self.con.sendall(b"\n")
                 break
             except socket.error as exc:
                 self.logger.error(exc.args[1] + ". Reconnecting..")
