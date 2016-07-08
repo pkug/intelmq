@@ -46,8 +46,8 @@ class CertBTContactExpertBot(Bot):
         if not contact:
             self.logger.error("E-mail not found for for the address: %r (%r)",
                               srcip, self.parameters.whois_server)
-            self.acknowledge_message()
-            return
+        else:
+            event.add("contact", requestor)
 
         self.send_message(event)
         self.acknowledge_message()
