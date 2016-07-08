@@ -57,11 +57,11 @@ class CopyrightParserBot(Bot):
         event.add('classification.identifier', proto, sanitize=True)
         event.add('classification.type', 'piracy')
 
-        items = []
+        items = {}
         content = root.find(".//Content")
 
-        for item in content:
-            items.append({ e.tag: e.text for e in item })
+        for n, item in enumerate(content):
+            items[n] = { e.tag: e.text for e in item }
 
         event.add('extra', items)
 
