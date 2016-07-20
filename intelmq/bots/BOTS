@@ -854,6 +854,17 @@
                 "file": "/opt/intelmq/var/lib/bots/file-output/events.txt"
             }
         },
+        "History": {
+            "description": "History bot stores history of selected event fields in a directory",
+            "module": "intelmq.bots.outputs.history.output",
+            "parameters": {
+                "dir": "/opt/intelmq/hist",
+		"fields": "source.ip",
+		"items": "10",
+		"tsv": true,
+		"gzip": false
+            }
+        },
         "IntelMQ Mailer": {
             "description": "IntelMQ Mailer is the bot responsible to send events to a MongoDB database.",
             "module": "intelmq.bots.outputs.intelmqmailer.output",
