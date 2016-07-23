@@ -245,6 +245,8 @@ def log(name, log_path=intelmq.DEFAULT_LOGGING_PATH, log_level="DEBUG",
     if not syslog:
         handler = logging.FileHandler("%s/%s.log" % (log_path, name))
         handler.setLevel(log_level)
+        handler_err = logging.FileHandler("%s/errors.log" % log_path)
+        handler_err.setLevel("ERROR")
     else:
         if type(syslog) is tuple or type(syslog) is list:
             handler = logging.handlers.SysLogHandler(address=tuple(syslog))
@@ -255,6 +257,10 @@ def log(name, log_path=intelmq.DEFAULT_LOGGING_PATH, log_level="DEBUG",
     formatter = logging.Formatter(LOG_FORMAT)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
+
+    if not syslog:
+        handler_err.setFormatter(formatter)
+        logger.addHandler(handler_err)
 
     if stream or stream is None:
         console_formatter = logging.Formatter(LOG_FORMAT_STREAM)
