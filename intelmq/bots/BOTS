@@ -324,6 +324,15 @@
                 "rate_limit": 10800
             }
         },
+        "Generic HTTP Collector": {
+            "description": "Generic HTTP collector",
+            "module": "intelmq.bots.collectors.http.collector_http",
+            "parameters": {
+                "feed": "Generic",
+                "http_url": "<http_url>",
+                "rate_limit": 10800
+            }
+        },
         "Generic Mail Attachment Fetcher": {
             "description": "Monitor IMAP mailboxes and retrieve mail attachments",
             "module": "intelmq.bots.collectors.mail.collector_mail_attach",
