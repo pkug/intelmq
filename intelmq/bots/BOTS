@@ -1132,6 +1132,14 @@
                 "type": "c&c"
             }
         },
+        "Generic IP/network set": {
+            "description": "Generic IP/network parser parses line containing IP or network ignoring comments starting with character #. It's handy for parsing various blocklists such as FireHOL",
+            "module": "intelmq.bots.parsers.generic.parser_netset",
+            "parameters": {
+                "direction": "source|destination",
+                "clstype": "blacklist"
+            }
+        },
         "HpHosts": {
             "description": "HpHosts Parser is the bot responsible to parse the report and sanitize the information.",
             "module": "intelmq.bots.parsers.hphosts.parser",
