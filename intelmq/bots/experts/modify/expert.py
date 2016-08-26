@@ -51,7 +51,8 @@ class ModifyExpertBot(Bot):
     def process(self):
         event = self.receive_message()
 
-        for section_id, section in self.config.items():
+        for section_id, section in sorted(self.config.items(),
+                                          key=lambda x:x[0]):
             default_cond = section.get('__default', [{}, {}])[0]
             default_action = section.get('__default', [{}, {}])[1]
             if not self.matches((section_id, '__default'),
